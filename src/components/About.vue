@@ -11,9 +11,8 @@
         >
           <div class="relative w-64 h-64 md:w-80 md:h-80">
             <div class="absolute inset-0 bg-electric-blue rounded-full blur-2xl opacity-20 animate-pulse"></div>
-            <div class="relative w-full h-full rounded-full border-4 border-gray-800 overflow-hidden bg-gray-900 flex items-center justify-center group hover:border-electric-blue transition-colors duration-300">
-               <!-- Placeholder for actual image -->
-               <span class="text-6xl group-hover:scale-110 transition-transform duration-300">👨🏾‍💻</span>
+            <div class="relative w-full h-full rounded-full border-4 border-gray-800 overflow-hidden bg-gray-900 group hover:border-electric-blue transition-colors duration-300">
+               <img src="../assets/georgeIkwegbu.jpg" alt="George Ikwegbu" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
             </div>
           </div>
         </div>
