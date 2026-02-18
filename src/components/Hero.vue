@@ -57,11 +57,9 @@
         >
           View My Work
         </button>
-        <!-- href="/resume.pdf"  -->
         <a 
-          href="../assets/George_Ikwegbu_CV.pdf" 
-          download
-          target="_blank"
+          :href="resumePdf" 
+          download="George_Ikwegbu_CV.pdf"
           class="px-8 py-3 border border-gray-600 text-white font-medium rounded-full hover:border-electric-blue hover:text-electric-blue hover:bg-white/5 transition-all duration-300 w-full sm:w-auto"
         >
           Download CV
@@ -103,6 +101,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import resumePdf from '../assets/George_Ikwegbu_CV.pdf'
 
 const displayedText = ref('')
 const roles = [
