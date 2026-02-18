@@ -4,7 +4,8 @@ export const education = [
         degree: "MSc Computer Science",
         school: "York St. John University, London",
         year: "2024–2026",
-        status: "In Progress",
+        // status: "In Progress",
+        status: "Completed",
         focus: "AI, Cloud Computing, Machine Learning, Agile, IoT, Cyber Security, UX Design, Big Data",
         dissertation: "End-to-End Speech Recognition for Low-Resource Languages (Igbo) — Cross-platform Flutter app"
     },
