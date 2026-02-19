@@ -13,7 +13,7 @@ export const education = [
         id: 2,
         degree: "B.Eng Computer Engineering",
         school: "Michael Okpara University of Agriculture, Nigeria",
-        year: "2014 - 2019",
+        year: "2014-2019",
         status: "Completed",
         focus: "Programming, Systems Architecture, Microcontrollers, Data Communication, AI, Robotics",
         project: "Questionnaire app that automated research data entry into Excel/SPSS"

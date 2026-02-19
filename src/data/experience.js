@@ -10,7 +10,7 @@ export const experience = [
             "Developed the core customer-facing app with real-time features including GPS tracking and socket-based chat.",
             "Implemented liveness verification and WebRTC audio calling."
         ],
-        tags: ["Flutter", "Team Lead", "Mobility", "Socket.io"]
+        tags: ["Flutter", "Team Lead", "Mobility", "Socket.io", "Bloc/Cubit", "Clean Architecture", "Firebase", "Google Places", "WebRTC", "Liveness Detection"]
     },
     {
         id: 2,
@@ -23,7 +23,7 @@ export const experience = [
             "Integrated Paystack payment gateway and pushed open-source contributions to the Paystack package.",
             "Optimised UI for tablet form factors."
         ],
-        tags: ["Flutter", "Fintech", "Team Lead", "Paystack"]
+        tags: ["Flutter", "Fintech", "Team Lead", "Paystack", "Provider", "MVVM", "Google Maps", "Calendar Scheduler", "Firebase", "Google Places",]
     },
     {
         id: 3,
@@ -36,7 +36,7 @@ export const experience = [
             "Reduced deployment times by 40% through Fastlane CI/CD integration.",
             "Collaborated with security teams to ensure penetration testing compliance."
         ],
-        tags: ["Flutter", "Fintech", "Security", "CI/CD"]
+        tags: ["Flutter", "Fintech", "Security", "CI/CD", "Device Fingerprinting", "Root Detection", "Fastlane", "Bloc/Cubit", "Clean Architecture", "Firebase"]
     },
     {
         id: 4,
@@ -49,7 +49,7 @@ export const experience = [
             "Integrated native modules using Kotlin and Swift via Method Channels.",
             " achieved a 98% reduction in crash rates by resolving critical memory leaks."
         ],
-        tags: ["Flutter", "Fintech", "Native Integration", "Performance"]
+        tags: ["Flutter", "Fintech", "Native Integration", "Performance", "MVVM", "Method Channels", "Kotlin", "Swift", "Firebase", "Provider"]
     },
     {
         id: 5,
@@ -60,7 +60,7 @@ export const experience = [
         description: [
             "Led mobile development initiatives for payment solutions."
         ],
-        tags: ["Flutter", "Fintech"]
+        tags: ["Flutter", "Fintech", "MVVM", "Provider", "Firebase"]
     },
     {
         id: 6,
