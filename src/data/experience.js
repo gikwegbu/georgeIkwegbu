@@ -1,19 +1,6 @@
 export const experience = [
     {
         id: 1,
-        role: "Mobile Team Head of Department & Lead Flutter Engineer",
-        company: "AlphaRide (LisBon)",
-        location: "Lagos, Nigeria",
-        date: "Aug 2024 – Jan 2025",
-        description: [
-            "Led the mobile engineering department, overseeing architectural decisions and team mentorship.",
-            "Developed the core customer-facing app with real-time features including GPS tracking and socket-based chat.",
-            "Implemented liveness verification and WebRTC audio calling."
-        ],
-        tags: ["Flutter", "Team Lead", "Mobility", "Socket.io", "Bloc/Cubit", "Clean Architecture", "Firebase", "Google Places", "WebRTC", "Liveness Detection"]
-    },
-    {
-        id: 2,
         role: "Team Lead & Flutter Engineer",
         company: "Reisty Inc",
         location: "Lagos, Nigeria",
@@ -24,6 +11,19 @@ export const experience = [
             "Optimised UI for tablet form factors."
         ],
         tags: ["Flutter", "Fintech", "Team Lead", "Paystack", "Provider", "MVVM", "Google Maps", "Calendar Scheduler", "Firebase", "Google Places",]
+    },
+    {
+        id: 2,
+        role: "Mobile Team Head of Department & Lead Flutter Engineer (Part-time)",
+        company: "AlphaRide (LisBon)",
+        location: "Lagos, Nigeria",
+        date: "Aug 2024 – Jan 2025",
+        description: [
+            "Led the mobile engineering department, overseeing architectural decisions and team mentorship.",
+            "Developed the core customer-facing app with real-time features including GPS tracking and socket-based chat.",
+            "Implemented liveness verification and WebRTC audio calling."
+        ],
+        tags: ["Flutter", "Team Lead", "Mobility", "Socket.io", "Bloc/Cubit", "Clean Architecture", "Firebase", "Google Places", "WebRTC", "Liveness Detection"]
     },
     {
         id: 3,
