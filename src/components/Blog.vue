@@ -66,5 +66,9 @@
 </template>
 
 <script setup>
-import { blogPosts } from '../data/blog'
+import { useMainStore } from '../store'
+import { storeToRefs } from 'pinia'
+
+const store = useMainStore()
+const { blogs: blogPosts } = storeToRefs(store)
 </script>

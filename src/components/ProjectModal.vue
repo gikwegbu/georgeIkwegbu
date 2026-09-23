@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+  <div v-if="isOpen && project" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
     <!-- Backdrop -->
     <div 
       class="absolute inset-0 bg-black/90 backdrop-blur-sm"
@@ -17,19 +17,22 @@
       :enter="{ opacity: 1, scale: 1, y: 0, transition: { duration: 300 } }"
     >
       <!-- Header Image / Carousel -->
-      <div class="relative h-64 sm:h-80 bg-black flex-shrink-0">
-         <button 
+      <div class="relative h-64 sm:h-80 bg-black flex-shrink-0 group">
+        <button 
           @click="closeModal"
           class="absolute top-4 right-4 z-20 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         
-        <div v-if="project.heroImage" class="w-full h-full">
-           <img :src="project.heroImage" class="w-full h-full object-cover" />
+        <div v-if="project.heroImage" class="w-full h-full cursor-zoom-in relative" @click="openLightbox(0)">
+          <img :src="project.heroImage" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute bottom-4 left-4 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-xs font-mono text-electric-blue border border-gray-800 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5">
+            <span>🔍 Click to expand hero cover</span>
+          </div>
         </div>
         <div v-else class="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-           <span class="text-6xl">📱</span>
+          <span class="text-6xl">📱</span>
         </div>
       </div>
 
@@ -79,18 +82,116 @@
           </div>
 
           <!-- Sidebar Tech Stack -->
-          <div class="w-full md:w-64 flex-shrink-0">
-            <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Tech Stack</h4>
-            <div class="flex flex-wrap gap-2">
-              <span 
-                v-for="tech in project.techStack" 
-                :key="tech"
-                class="px-3 py-1.5 bg-gray-800 rounded-lg text-sm text-electric-blue border border-gray-700"
-              >
-                {{ tech }}
-              </span>
+          <div class="w-full md:w-64 flex-shrink-0 space-y-6">
+            <div>
+              <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Tech Stack</h4>
+              <div class="flex flex-wrap gap-2">
+                <span 
+                  v-for="tech in project.techStack" 
+                  :key="tech"
+                  class="px-3 py-1.5 bg-gray-800 rounded-lg text-sm text-electric-blue border border-gray-700"
+                >
+                  {{ tech }}
+                </span>
+              </div>
             </div>
           </div>
+        </div>
+
+        <!-- Screenshots Gallery -->
+        <div v-if="project.screenshots && project.screenshots.length > 0" class="mt-8 pt-8 border-t border-gray-800">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest">Screenshots Preview</h4>
+            <span class="text-xs text-electric-blue font-mono">Click any screenshot to expand</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div 
+              v-for="(img, idx) in project.screenshots" 
+              :key="idx" 
+              @click="openLightbox(hasHeroImage ? idx + 1 : idx)"
+              class="aspect-[9/16] rounded-xl overflow-hidden bg-black border border-gray-800 group relative hover:border-electric-blue/60 transition-all shadow-md cursor-zoom-in"
+            >
+              <img :src="img" :alt="`${project.title} screenshot ${idx + 1}`" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <!-- Hover Overlay with Zoom Icon -->
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span class="p-2 rounded-full bg-black/70 text-electric-blue text-sm border border-electric-blue/30">🔍</span>
+              </div>
+              <div class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-gray-300">
+                #{{ idx + 1 }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FULLSCREEN EXPANDED IMAGE LIGHTBOX -->
+    <div 
+      v-if="lightbox.show" 
+      class="fixed inset-0 z-[70] flex flex-col items-center justify-between p-4 sm:p-6 bg-black/95 backdrop-blur-xl select-none"
+      @keydown.esc="closeLightbox"
+      tabindex="0"
+    >
+      <!-- Lightbox Header -->
+      <div class="w-full flex items-center justify-between px-2 sm:px-6 py-2">
+        <div class="flex items-center gap-3">
+          <span class="font-display font-bold text-white text-base sm:text-lg">{{ project.title }}</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-mono bg-electric-blue/10 text-electric-blue border border-electric-blue/30">
+            {{ lightboxIndex === 0 && hasHeroImage ? 'Hero Cover' : `Screenshot ${hasHeroImage ? lightboxIndex : lightboxIndex + 1} of ${allProjectImages.length - (hasHeroImage ? 1 : 0)}` }}
+          </span>
+        </div>
+
+        <button 
+          @click="closeLightbox" 
+          class="p-2.5 rounded-full bg-gray-900 border border-gray-700 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+          title="Close Lightbox (Esc)"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Main Expanded Image & Navigation Arrows -->
+      <div class="relative flex-1 w-full flex items-center justify-center my-2 max-h-[78vh]">
+        <!-- Left Arrow -->
+        <button 
+          v-if="allProjectImages.length > 1"
+          @click.stop="prevImage"
+          class="absolute left-2 sm:left-6 z-10 p-3 rounded-full bg-gray-900/80 hover:bg-gray-800 border border-gray-700 text-white transition-all shadow-xl hover:scale-110"
+          title="Previous Image (←)"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+
+        <!-- Current Expanded Image -->
+        <div class="max-w-full max-h-full flex items-center justify-center p-2">
+          <img 
+            :src="allProjectImages[lightboxIndex]" 
+            alt="Expanded view" 
+            class="max-w-[90vw] max-h-[75vh] object-contain rounded-xl border border-gray-800/80 shadow-2xl transition-transform duration-200"
+          />
+        </div>
+
+        <!-- Right Arrow -->
+        <button 
+          v-if="allProjectImages.length > 1"
+          @click.stop="nextImage"
+          class="absolute right-2 sm:right-6 z-10 p-3 rounded-full bg-gray-900/80 hover:bg-gray-800 border border-gray-700 text-white transition-all shadow-xl hover:scale-110"
+          title="Next Image (→)"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <!-- Bottom Thumbnail Strip -->
+      <div v-if="allProjectImages.length > 1" class="w-full flex justify-center gap-2.5 overflow-x-auto py-2 px-4 max-w-2xl custom-scrollbar">
+        <div 
+          v-for="(img, idx) in allProjectImages" 
+          :key="img + idx"
+          @click="lightboxIndex = idx"
+          class="w-12 h-16 sm:w-14 sm:h-20 rounded-lg overflow-hidden border-2 cursor-pointer transition-all shrink-0 bg-black"
+          :class="lightboxIndex === idx ? 'border-electric-blue scale-105 shadow-lg shadow-electric-blue/20' : 'border-gray-800 opacity-50 hover:opacity-100'"
+        >
+          <img :src="img" alt="thumb" class="w-full h-full object-cover" />
         </div>
       </div>
     </div>
@@ -98,23 +199,81 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted, reactive } from 'vue'
 import { useMainStore } from '../store'
 import { storeToRefs } from 'pinia'
 
 const store = useMainStore()
 const { isModalOpen: isOpen, selectedProject: project } = storeToRefs(store)
 
+const lightbox = reactive({
+  show: false
+})
+const lightboxIndex = ref(0)
+
+const hasHeroImage = computed(() => Boolean(project.value?.heroImage))
+
+const allProjectImages = computed(() => {
+  if (!project.value) return []
+  const list = []
+  if (project.value.heroImage) {
+    list.push(project.value.heroImage)
+  }
+  if (Array.isArray(project.value.screenshots)) {
+    list.push(...project.value.screenshots.filter(Boolean))
+  }
+  return list
+})
+
+const openLightbox = (index = 0) => {
+  if (!allProjectImages.value.length) return
+  lightboxIndex.value = Math.max(0, Math.min(index, allProjectImages.value.length - 1))
+  lightbox.show = true
+}
+
+const closeLightbox = () => {
+  lightbox.show = false
+}
+
+const nextImage = () => {
+  if (!allProjectImages.value.length) return
+  lightboxIndex.value = (lightboxIndex.value + 1) % allProjectImages.value.length
+}
+
+const prevImage = () => {
+  if (!allProjectImages.value.length) return
+  lightboxIndex.value = (lightboxIndex.value - 1 + allProjectImages.value.length) % allProjectImages.value.length
+}
+
+// Keyboard navigation
+const handleKeyDown = (e) => {
+  if (!lightbox.show) return
+  if (e.key === 'Escape') closeLightbox()
+  if (e.key === 'ArrowRight') nextImage()
+  if (e.key === 'ArrowLeft') prevImage()
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
+
 const closeModal = () => {
+  closeLightbox()
   store.closeProjectModal()
 }
 </script>
 
 <style scoped>
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  height: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(31, 41, 55, 0.5); 
+  background: rgba(31, 41, 55, 0.4); 
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #374151; 

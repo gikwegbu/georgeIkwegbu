@@ -55,5 +55,9 @@
 </template>
 
 <script setup>
-import { experience } from '../data/experience'
+import { useMainStore } from '../store'
+import { storeToRefs } from 'pinia'
+
+const store = useMainStore()
+const { experience } = storeToRefs(store)
 </script>

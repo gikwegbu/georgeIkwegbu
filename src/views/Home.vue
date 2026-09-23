@@ -20,6 +20,8 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import { useMainStore } from '../store'
 import Navbar from '../components/Navbar.vue'
 import Hero from '../components/Hero.vue'
 import About from '../components/About.vue'
@@ -32,4 +34,10 @@ import Blog from '../components/Blog.vue'
 import Contact from '../components/Contact.vue'
 import Footer from '../components/Footer.vue'
 import ProjectModal from '../components/ProjectModal.vue'
+
+const store = useMainStore()
+
+onMounted(() => {
+  store.fetchAll()
+})
 </script>

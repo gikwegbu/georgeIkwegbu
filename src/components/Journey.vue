@@ -42,5 +42,9 @@
 </template>
 
 <script setup>
-import { journey } from '../data/journey'
+import { useMainStore } from '../store'
+import { storeToRefs } from 'pinia'
+
+const store = useMainStore()
+const { journey } = storeToRefs(store)
 </script>

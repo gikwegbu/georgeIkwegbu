@@ -48,5 +48,9 @@
 </template>
 
 <script setup>
-import { education } from '../data/education'
+import { useMainStore } from '../store'
+import { storeToRefs } from 'pinia'
+
+const store = useMainStore()
+const { education } = storeToRefs(store)
 </script>

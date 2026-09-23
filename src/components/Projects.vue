@@ -54,19 +54,21 @@
 import { computed } from 'vue'
 import { useMainStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { projects } from '../data/projects'
 import ProjectCard from './ProjectCard.vue'
 
 const store = useMainStore()
-const { activeCategory } = storeToRefs(store)
+const { activeCategory, projects } = storeToRefs(store)
 
-const categories = ['All', 'Fintech', 'Mobility', 'IoT']
+const categories = computed(() => {
+  const dynamicCategories = Array.from(new Set(projects.value.map(p => p.category).filter(Boolean)))
+  return ['All', ...dynamicCategories]
+})
 
 const filteredProjects = computed(() => {
   if (activeCategory.value === 'All') {
-    return projects
+    return projects.value
   }
-  return projects.filter(project => project.category === activeCategory.value)
+  return projects.value.filter(project => project.category === activeCategory.value)
 })
 
 const setCategory = (category) => {

@@ -35,5 +35,9 @@
 </template>
 
 <script setup>
-import { skills } from '../data/skills'
+import { useMainStore } from '../store'
+import { storeToRefs } from 'pinia'
+
+const store = useMainStore()
+const { skills } = storeToRefs(store)
 </script>
