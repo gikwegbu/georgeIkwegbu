@@ -8,7 +8,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div 
-          v-for="(post, index) in blogPosts" 
+          v-for="(post, index) in sortedBlogs" 
           :key="post.id"
           class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-600 transition-all duration-300 group flex flex-col h-full"
           v-motion
@@ -66,9 +66,14 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useMainStore } from '../store'
 import { storeToRefs } from 'pinia'
 
 const store = useMainStore()
 const { blogs: blogPosts } = storeToRefs(store)
+
+const sortedBlogs = computed(() => {
+  return [...(blogPosts.value || [])].sort((a, b) => (Number(b.order) || 0) - (Number(a.order) || 0))
+})
 </script>

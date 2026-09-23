@@ -1,6 +1,6 @@
 export const projects = [
     {
-        id: 1,
+        id: "proj_alpharide",
         title: "AlphaRide",
         category: "Mobility",
         shortDescription: "Real-time ride-hailing app with live tracking and in-app chat.",
@@ -11,10 +11,11 @@ export const projects = [
         playStoreUrl: "https://play.google.com/store/apps/details?id=com.lisbon.app",
         appStoreUrl: "https://apps.apple.com/us/app/lisbon-user/id6737439784",
         role: "Head of Department & Lead Flutter Engineer",
-        year: "2024"
+        year: "2024",
+        order: 7
     },
     {
-        id: 2,
+        id: "proj_reisty",
         title: "Reisty",
         category: "Fintech",
         shortDescription: "Restaurant reservation and payment platform for iOS and iPad.",
@@ -25,10 +26,11 @@ export const projects = [
         playStoreUrl: "https://play.google.com/store/apps/details?id=com.reisty.reisty",
         appStoreUrl: "https://apps.apple.com/us/app/reisty/id6473653634",
         role: "Team Lead & Flutter Engineer",
-        year: "2023"
+        year: "2023",
+        order: 6
     },
     {
-        id: 2,
+        id: "proj_reisty_restaurant",
         title: "Reisty Restaurant",
         category: "Fintech",
         shortDescription: "Restaurant reservation management tool for iOS and iPad.",
@@ -39,10 +41,11 @@ export const projects = [
         playStoreUrl: "https://play.google.com/store/apps/details?id=com.reisty.restaurant.reisty_restaurant",
         appStoreUrl: "https://apps.apple.com/gb/app/reisty-restaurant/id6739537057",
         role: "Team Lead & Flutter Engineer",
-        year: "2023"
+        year: "2023",
+        order: 5
     },
     {
-        id: 3,
+        id: "proj_turog_fintech",
         title: "Turog Fintech App",
         category: "Fintech",
         shortDescription: "Secure fintech app with device fingerprinting and CI/CD via Fastlane.",
@@ -53,10 +56,11 @@ export const projects = [
         playStoreUrl: "https://play.google.com/store/apps/details?id=app.adiba.capitalfield.miya",
         appStoreUrl: "https://apps.apple.com/us/app/rexa-finance/id6446645311",
         role: "Senior Flutter Engineer",
-        year: "2023"
+        year: "2023",
+        order: 4
     },
     {
-        id: 4,
+        id: "proj_the_temple_app",
         title: "The Temple App",
         category: "Fintech",
         shortDescription: "MVVM mobile app with native Kotlin/Swift bridging and 98% crash reduction.",
@@ -67,10 +71,11 @@ export const projects = [
         playStoreUrl: "https://play.google.com/store/apps/details?id=com.temple.amaze&hl=en&gl=US",
         appStoreUrl: "https://apps.apple.com/tt/app/amaze-africa/id1591003894",
         role: "Mobile App Engineer",
-        year: "2022"
+        year: "2022",
+        order: 3
     },
     {
-        id: 5,
+        id: "proj_pennywise",
         title: "Pennywise",
         category: "Fintech",
         shortDescription: "Personal finance tracker with budgeting tools and analytics.",
@@ -81,10 +86,11 @@ export const projects = [
         playStoreUrl: null,
         appStoreUrl: null,
         role: "Lead Mobile Developer",
-        year: "2020"
+        year: "2020",
+        order: 2
     },
     {
-        id: 6,
+        id: "proj_powercap",
         title: "Powercap",
         category: "IoT",
         shortDescription: "IoT power management app with real-time device monitoring.",
@@ -95,10 +101,11 @@ export const projects = [
         playStoreUrl: null,
         appStoreUrl: null,
         role: "Lead Mobile Developer",
-        year: "2020"
+        year: "2020",
+        order: 1
     },
     {
-        id: 7,
+        id: "proj_selyct",
         title: "Selyct",
         category: "Mobility",
         shortDescription: "UK mobility app with real-time navigation and Google Maps integration.",
@@ -109,6 +116,7 @@ export const projects = [
         playStoreUrl: null,
         appStoreUrl: null,
         role: "Lead Mobile Developer (Remote)",
-        year: "2020"
+        year: "2020",
+        order: 0
     }
 ];

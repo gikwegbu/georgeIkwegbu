@@ -86,7 +86,7 @@ export const useMainStore = defineStore('main', {
 
         async fetchBlogs() {
             try {
-                const data = await getCollectionDocs('blogs', 'order', 'asc')
+                const data = await getCollectionDocs('blogs', 'order', 'desc')
                 if (data && data.length > 0) {
                     this.blogs = data
                 }
@@ -97,7 +97,7 @@ export const useMainStore = defineStore('main', {
 
         async fetchProjects() {
             try {
-                const data = await getCollectionDocs('projects', 'order', 'asc')
+                const data = await getCollectionDocs('projects', 'order', 'desc')
                 if (data && data.length > 0) {
                     this.projects = data
                 }

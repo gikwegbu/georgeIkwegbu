@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Interactive case-study detail modal (`SpeakingModal.vue`) featuring talk synopsis, **⚡ Key Technical Takeaways**, and high-resolution stage photo gallery with carousel Lightbox navigation.
   - **1-Click Slide Downloader Engine**: Built-in file blob downloader that triggers immediate direct file downloads for slide decks (`.pdf`/`.pptx`).
   - Studio Admin tab for full CRUD, Firebase Storage pipeline (`speaking/{talkId}/hero`, `speaking/{talkId}/screenshots`, `speaking/{talkId}/slides`), and drag-and-drop photo reordering.
-  - **Automatic FIFO Descending Ordering**: Incremental order calculation (`maxOrder + 1`) ensuring newest items always display first without requiring manual renumbering of older entries.
+  - **Automatic FIFO Descending Ordering System**: Standardized auto-incrementing order calculation (`maxOrder + 1`) and descending sorting (`order: 'desc'`) across **Blogs**, **Projects**, and **Public Speaking**, ensuring newest entries automatically appear at the top without requiring manual renumbering of older records.
 - **Firebase Cloud Firestore Integration**:
   - Dynamic cloud database support across 7 collections: `blogs`, `projects`, `speaking` (Public Speaking), `journey` (My Tech Journey), `experience` (Work Experience), `skills` (Technical Skills), and `education`.
   - Service layer (`src/firebase/db.js`) providing standardized CRUD operations and auto ID generators (`generateDocId`).

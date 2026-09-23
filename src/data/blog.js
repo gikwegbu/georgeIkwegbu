@@ -6,7 +6,8 @@ export const blogPosts = [
     //     coverImage: "",
     //     excerpt: "The article guide provides a step-by-step walkthrough on using Flutter to implement a cross-platform Single Sign-On (SSO) system for multiple related apps—a way to share login state across an app ecosystem.",
     //     date: "2026-09-23",
-    //     readTime: "12 min read"
+    //     readTime: "12 min read",
+    //     order: 20
     // },
     {
         id: 19,
@@ -15,7 +16,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/7svpf24v16mznewjiylk.png",
         excerpt: "The article guide provides a step-by-step walkthrough on using Shorebird to implement over-the-air code push updates for Flutter applications, bypassing standard app store reviews.",
         date: "2026-09-23",
-        readTime: "28 min read"
+        readTime: "28 min read",
+        order: 19
     },
     {
         id: 18,
@@ -24,7 +26,8 @@ export const blogPosts = [
         coverImage: null,
         excerpt: "The article shows how to set up App Links (Android) and Universal Links (iOS) in a Flutter app (a replacement for Firebase Dynamic Links, which is being discontinued).",
         date: "2024-04-8",
-        readTime: "8 min read"
+        readTime: "8 min read",
+        order: 18
     },
     {
         id: 17,
@@ -33,7 +36,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/p7ck8hfbarj0d2qr5abd.png",
         excerpt: "The article explains how to build a grouped list view in Flutter that organizes items (like countries) based on a property (such as a grouping “order”), displaying each group under a header (for example by continent).",
         date: "2024-02-5",
-        readTime: "20 min read"
+        readTime: "20 min read",
+        order: 17
     },
     {
         id: 16,
@@ -42,7 +46,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/utfuebyvptrsj80ure1i.png",
         excerpt: "The article explains how to implement Apple Sign-In and its caveats with resigning-in, in a Flutter app.",
         date: "2024-02-5",
-        readTime: "20 min read"
+        readTime: "20 min read",
+        order: 16
     },
     {
         id: 15,
@@ -51,7 +56,8 @@ export const blogPosts = [
         coverImage: null,
         excerpt: "This short post, I described an issue where a Flutter iOS app gets stuck indefinitely on the splash screen when installed on some real devices",
         date: "2023-12-5",
-        readTime: "20 min read"
+        readTime: "20 min read",
+        order: 15
     },
     {
         id: 14,
@@ -60,7 +66,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kr70t6ma9a2ixvqmcwfq.jpg",
         excerpt: "As at the time of writing this article, paystack integration for android and mobile SDK, only supports card payments and bank (with just Zenith as the option). In this article, you will learn how to include other payment options in your flutter application",
         date: "2022-07-21",
-        readTime: "10 min read"
+        readTime: "10 min read",
+        order: 14
     },
     {
         id: 13,
@@ -69,7 +76,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/olru7cin8iw3q4z0278j.jpg",
         excerpt: "This post explains how the a Flutter iOS build error when trying to run a cloned Flutter project on a real iOS device failed during the Xcode build step with a ProcessException referencing a missing file and PhaseScriptExecution failed with a nonzero exit code.",
         date: "2022-06-10",
-        readTime: "15 min read"
+        readTime: "15 min read",
+        order: 13
     },
     {
         id: 12,
@@ -78,7 +86,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/5pywdp8au2mdxjysbolv.jpg",
         excerpt: "The article walks through how to prepare, sign, and build a release APK for a Flutter Android app — steps you typically take before publishing to the Play Store (though Google now prefers app bundles).",
         date: "2021-10-24",
-        readTime: "25 min read"
+        readTime: "25 min read",
+        order: 12
     },
     {
         id: 11,
@@ -87,7 +96,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/29ab37mdnofvip8pygb4.jpg",
         excerpt: "The article explains how to replace the default Flutter app launcher icon with your own custom icon by using the flutter_launcher_icons package. Flutter generates a default Flutter logo as the launcher icon for new projects, but for real apps you’ll want a personalized icon.",
         date: "2021-10-21",
-        readTime: "10 min read"
+        readTime: "10 min read",
+        order: 11
     },
     {
         id: 10,
@@ -96,7 +106,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xg2zk99tfjhd3uc58vxw.jpg",
         excerpt: "The article explains a simple way to organize a Flutter project’s folders and files so the codebase stays clean and easy to work with—especially for beginners. There is an emphasises that there’s no perfect way to structure a Flutter project, but having a consistent pattern helps reduce confusion and makes maintaining and reading code easier over time",
         date: "2021-10-20",
-        readTime: "15 min read"
+        readTime: "15 min read",
+        order: 10
     },
     {
         id: 9,
@@ -105,7 +116,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/n9sphkz5vea0yhas08md.jpg",
         excerpt: "The article explains how to add a custom notification icon for push notifications in a Cordova app using Firebase Cloud Messaging (FCM). By default, many FCM plugins use the app’s launcher icon, which may not look right in the status bar — especially on newer Android versions where the notification icon must be a simple monochrome image.",
         date: "2021-07-19",
-        readTime: "10 min read"
+        readTime: "10 min read",
+        order: 9
     },
     {
         id: 8,
@@ -114,7 +126,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/bbejypzy991x124gknse.jpg",
         excerpt: "The article is a step‑by‑step guide on integrating Firebase Cloud Messaging (FCM) push notifications into a Cordova Android app — including how to create the project, install the plugin, fix plugin bugs, and handle token & notification events. It’s written for developers who encountered errors when implementing FCM in Cordova and explains practical fixes",
         date: "2021-06-20",
-        readTime: "5 min read"
+        readTime: "5 min read",
+        order: 8
     },
     {
         id: 7,
@@ -123,7 +136,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/i/98hcfujxu6k6o100508u.jpg",
         excerpt: "The article describes a common problem when using the cordova-plugin-camera plugin in a Cordova project built with the Quasar framework: the app appears to crash or restart after opening the camera. This happens because hybrid apps run inside a single WebView, and when the device’s camera opens, the system switches to a native camera app and your Cordova app goes to the background",
         date: "2021-02-6",
-        readTime: "15 min read"
+        readTime: "15 min read",
+        order: 7
     },
     {
         id: 6,
@@ -132,7 +146,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/i/ktfqvyg5lveo6oas32kg.jpg",
         excerpt: "This tutorial shows how to quickly build a mock REST API using JSON‑Server together with Faker (for generating fake data) and Lodash (for utilities like loops). It’s ideal when your frontend (e.g., Vue, React) needs a backend API that hasn’t been built yet, allowing you to create realistic endpoints and data in minutes without writing any backend code.",
         date: "2020-08-24",
-        readTime: "35 min read"
+        readTime: "35 min read",
+        order: 6
     },
     {
         id: 5,
@@ -141,7 +156,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/i/ez4llzsp3ckogrs6x1zc.jpg",
         excerpt: "The article walks through two simple ways to deploy a Vue or Quasar app to Netlify — a popular static hosting platform:",
         date: "2020-07-30",
-        readTime: "5 min read"
+        readTime: "5 min read",
+        order: 5
     },
     {
         id: 4,
@@ -150,7 +166,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/i/7hiamn7b8rkutxuo4aaj.jpg",
         excerpt: "This guide walks through how to protect routes (pages) in a Quasar app using Vuex and Vue Router navigation guards. It shows how to import the Vuex store into the router configuration file (routes.js) and set up a global beforeEach guard that checks if a route requires authentication and whether the user is logged in, redirecting to the login page if necessary.",
         date: "2020-06-22",
-        readTime: "10 min read"
+        readTime: "10 min read",
+        order: 4
     },
     {
         id: 3,
@@ -159,7 +176,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/i/oa6zygcndsc4lhzhe3bl.jpg",
         excerpt: "The article shows a simple way to persist your Vuex state across page reloads in a Quasar app by using the vuex‑persistedstate library. Quasar (like Vue) keeps Vuex state in memory, so without persistence, the data will reset whenever the browser refreshes.",
         date: "2020-06-20",
-        readTime: "20 min read"
+        readTime: "20 min read",
+        order: 3
     },
     {
         id: 2,
@@ -168,7 +186,8 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/i/evdjhqylhwdedwzi13s0.jpg",
         excerpt: "The article explains how to implement infinite scroll / auto‑load more data when a user reaches the bottom of a page in a Vue/Quasar app. Instead of manually adding a button, it uses the Intersection Observer API — a browser API that watches when an element enters the viewport. When the user scrolls so that a target element (often an empty <div> at the end of your list) comes into view, it triggers an event to fetch additional data (e.g., the next page of results).",
         date: "2020-06-16",
-        readTime: "20 min read"
+        readTime: "20 min read",
+        order: 2
     },
     {
         id: 1,
@@ -177,6 +196,7 @@ export const blogPosts = [
         coverImage: "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https://dev-to-uploads.s3.amazonaws.com/i/mox4j0xdaifzcw6pqwce.PNG",
         excerpt: "The article shows how to navigate to a specific section of a page in Vue or Quasar apps using unique IDs. It explains how to set up anchor links and scroll to specific elements using Vue Router and JavaScript.",
         date: "2020-06-14",
-        readTime: "15 min read"
+        readTime: "15 min read",
+        order: 1
     },
 ];

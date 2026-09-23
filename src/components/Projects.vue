@@ -64,11 +64,15 @@ const categories = computed(() => {
   return ['All', ...dynamicCategories]
 })
 
+const sortedProjects = computed(() => {
+  return [...(projects.value || [])].sort((a, b) => (Number(b.order) || 0) - (Number(a.order) || 0))
+})
+
 const filteredProjects = computed(() => {
   if (activeCategory.value === 'All') {
-    return projects.value
+    return sortedProjects.value
   }
-  return projects.value.filter(project => project.category === activeCategory.value)
+  return sortedProjects.value.filter(project => project.category === activeCategory.value)
 })
 
 const setCategory = (category) => {

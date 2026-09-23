@@ -38,7 +38,7 @@ A modern, dynamic portfolio and real-time content management studio built for **
   - Presentation slide deck file upload to storage.
   - Drag-and-drop image reordering with instantaneous Firestore order sync.
   - Safe asset deletion confirmation modals.
-- **🆔 Standard Firestore Auto IDs & FIFO Ordering**: Automatic 20-character canonical Firestore ID generation and auto-incrementing display ordering for frictionless content creation.
+- **🆔 Standard Firestore Auto IDs & FIFO Ordering**: Automatic 20-character canonical Firestore ID generation and auto-incrementing descending display ordering (`order: 'desc'`) for frictionless content creation across blogs, projects, and speaking engagements.
 
 ---
 
