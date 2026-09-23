@@ -51,7 +51,7 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
           </div>
           <h1 class="text-2xl font-display font-bold text-white mb-1">Portfolio Studio</h1>
-          <p class="text-gray-400 text-sm">Sign in to manage your blogs, projects, and bio</p>
+          <p class="text-gray-400 text-sm">Sign in to manage your blogs, projects, speaking, and bio</p>
         </div>
 
         <div v-if="authError" class="mb-5 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2">
@@ -198,7 +198,7 @@
         >
           <!-- Item Card Header -->
           <div>
-            <!-- Image Preview thumbnail on Project or Blog card -->
+            <!-- Image Preview thumbnail on Project, Speaking, or Blog card -->
             <div 
               v-if="item.heroImage || item.coverImage" 
               @click.stop="openImagePreview(item.heroImage || item.coverImage, item.title || item.role)"
@@ -212,10 +212,15 @@
             </div>
 
             <div class="flex items-start justify-between gap-3 mb-2">
-              <span v-if="item.category || item.year || item.role" class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-electric-blue/10 text-electric-blue border border-electric-blue/20">
-                {{ item.category || item.year || item.role }}
+              <span v-if="item.eventType || item.category || item.year || item.role" class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-electric-blue/10 text-electric-blue border border-electric-blue/20">
+                {{ item.eventType || item.category || item.year || item.role }}
               </span>
               <span class="text-[10px] font-mono text-gray-500">ID: {{ item.id }}</span>
+            </div>
+
+            <!-- Subtitle/Event name -->
+            <div v-if="item.eventName" class="text-xs font-mono font-bold text-electric-blue/90 uppercase tracking-wide mb-1">
+              {{ item.eventName }}
             </div>
 
             <!-- Title & Details -->
@@ -223,8 +228,8 @@
               {{ item.title || item.degree || item.role || item.category }}
             </h3>
 
-            <p v-if="item.excerpt || item.shortDescription || item.subtitle || item.school || item.company" class="text-xs text-gray-400 line-clamp-3 mb-4 leading-relaxed">
-              {{ item.excerpt || item.shortDescription || item.subtitle || item.school || item.company }}
+            <p v-if="item.excerpt || item.shortDescription || item.subtitle || item.school || item.company || item.description" class="text-xs text-gray-400 line-clamp-3 mb-4 leading-relaxed">
+              {{ typeof item.description === 'string' ? item.description : (item.excerpt || item.shortDescription || item.subtitle || item.school || item.company) }}
             </p>
 
             <!-- Tags / Techstack preview -->
@@ -311,7 +316,7 @@
             </div>
           </template>
 
-          <!-- PROJECT FIELDS (WITH FIREBASE STORAGE HERO & MULTI-SCREENSHOTS) -->
+          <!-- PROJECT FIELDS -->
           <template v-if="activeTab === 'projects'">
             <div class="grid grid-cols-2 gap-4">
               <div>
@@ -321,154 +326,6 @@
               <div>
                 <label class="block text-xs font-mono text-gray-400 mb-1">Category *</label>
                 <input v-model="form.category" type="text" required placeholder="Fintech, Mobility, IoT, AI" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
-              </div>
-            </div>
-
-            <!-- HERO IMAGE SECTION -->
-            <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 space-y-3">
-              <div class="flex items-center justify-between">
-                <label class="text-xs font-mono text-gray-300 font-bold flex items-center gap-1.5">
-                  <span>🖼️ Hero Image (Cover)</span>
-                  <span v-if="form.heroImage" class="text-[10px] text-emerald-400 font-normal">● Uploaded</span>
-                </label>
-                <input
-                  ref="heroFileInput"
-                  type="file"
-                  accept="image/*"
-                  class="hidden"
-                  @change="handleHeroFileUpload"
-                />
-              </div>
-
-              <!-- Hero Image Preview -->
-              <div v-if="form.heroImage" class="relative group rounded-xl overflow-hidden border border-gray-800 bg-black max-h-48 flex items-center justify-center">
-                <img :src="form.heroImage" alt="Hero cover" class="w-full h-40 object-cover cursor-zoom-in" @click="openImagePreview(form.heroImage, 'Hero Cover Image')" />
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 pointer-events-none">
-                  <span class="px-3 py-1 rounded-lg text-xs font-mono bg-black/70 text-electric-blue border border-electric-blue/30">
-                    🔍 Click image to expand
-                  </span>
-                </div>
-                <!-- Delete Button (Top Right) -->
-                <button
-                  type="button"
-                  @click.stop="openDeleteImageConfirmation('hero', null, form.heroImage)"
-                  title="Delete Hero Image"
-                  class="absolute top-2 right-2 w-7 h-7 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center text-xs font-bold shadow-lg transition-transform hover:scale-110 z-10"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <!-- Hero Upload Button / Dropzone -->
-              <div v-else class="space-y-2">
-                <div
-                  @click="triggerHeroFileInput"
-                  class="border-2 border-dashed border-gray-800 hover:border-electric-blue/60 rounded-xl p-4 text-center cursor-pointer transition-colors bg-gray-900/40 hover:bg-gray-900/80"
-                >
-                  <div class="text-xl mb-1">📁</div>
-                  <div class="text-xs font-medium text-gray-300">Click to upload Hero Cover image</div>
-                  <div class="text-[10px] text-gray-500 font-mono">PNG, JPG, WebP up to 10MB</div>
-                </div>
-                <!-- Upload Progress -->
-                <div v-if="heroUpload.isUploading" class="space-y-1">
-                  <div class="flex justify-between text-[10px] font-mono text-gray-400">
-                    <span>Uploading hero image to Firebase Storage...</span>
-                    <span>{{ heroUpload.progress }}%</span>
-                  </div>
-                  <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
-                    <div class="bg-electric-blue h-1.5 rounded-full transition-all duration-200" :style="{ width: `${heroUpload.progress}%` }"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- SCREENSHOTS SECTION (MULTIPLE & DRAGGABLE) -->
-            <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 space-y-3">
-              <div class="flex items-center justify-between flex-wrap gap-2">
-                <div>
-                  <label class="text-xs font-mono text-gray-300 font-bold flex items-center gap-1.5">
-                    <span>📱 App Screenshots (Multiple)</span>
-                    <span class="text-[10px] text-gray-400 font-normal">({{ form.screenshots ? form.screenshots.length : 0 }} images)</span>
-                  </label>
-                  <p class="text-[10px] text-gray-500 mt-0.5">Drag to rearrange order. Click 🔍 to expand, ✕ to delete.</p>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input
-                    ref="screenshotsFileInput"
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    class="hidden"
-                    @change="handleScreenshotsUpload"
-                  />
-                  <button
-                    type="button"
-                    @click="triggerScreenshotsFileInput"
-                    :disabled="screenshotsUpload.isUploading"
-                    class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 hover:bg-gray-700 text-electric-blue border border-gray-700 transition-colors flex items-center gap-1.5 disabled:opacity-50"
-                  >
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>Add Screenshots</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Upload Progress -->
-              <div v-if="screenshotsUpload.isUploading" class="space-y-1">
-                <div class="flex justify-between text-[10px] font-mono text-gray-400">
-                  <span>Uploading {{ screenshotsUpload.totalFiles }} screenshot(s)...</span>
-                  <span>{{ screenshotsUpload.progress }}%</span>
-                </div>
-                <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
-                  <div class="bg-electric-blue h-1.5 rounded-full transition-all duration-200" :style="{ width: `${screenshotsUpload.progress}%` }"></div>
-                </div>
-              </div>
-
-              <!-- Thumbnails Grid with Drag and Drop Reordering -->
-              <div v-if="form.screenshots && form.screenshots.length > 0" class="grid grid-cols-3 sm:grid-cols-4 gap-3 pt-2">
-                <div
-                  v-for="(imgUrl, index) in form.screenshots"
-                  :key="imgUrl + index"
-                  draggable="true"
-                  @dragstart="handleDragStart($event, index)"
-                  @dragover.prevent="handleDragOver($event, index)"
-                  @drop="handleDrop($event, index)"
-                  @dragend="handleDragEnd"
-                  class="aspect-[9/16] rounded-xl overflow-hidden border border-gray-800 bg-black relative group cursor-grab active:cursor-grabbing hover:border-electric-blue/60 transition-all shadow-md select-none"
-                  :class="{ 'opacity-40 border-dashed border-electric-blue scale-95': draggedIndex === index }"
-                >
-                  <img :src="imgUrl" alt="screenshot" class="w-full h-full object-cover pointer-events-none" />
-
-                  <!-- Position Badge -->
-                  <div class="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 text-[10px] font-mono text-gray-300">
-                    #{{ index + 1 }}
-                  </div>
-
-                  <!-- Expand Icon on Hover -->
-                  <button
-                    type="button"
-                    @click.stop="openImagePreview(imgUrl, `Screenshot #${index + 1}`)"
-                    title="Click to expand"
-                    class="absolute bottom-1.5 right-1.5 p-1 rounded-md bg-black/80 hover:bg-black text-electric-blue text-[10px] font-mono shadow z-10"
-                  >
-                    🔍
-                  </button>
-
-                  <!-- Delete Button (Top Right) -->
-                  <button
-                    type="button"
-                    @click.stop="openDeleteImageConfirmation('screenshot', index, imgUrl)"
-                    title="Delete Screenshot"
-                    class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center text-[10px] font-bold shadow-lg transition-transform hover:scale-110 z-10"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
-
-              <div v-else class="text-center py-6 border border-dashed border-gray-800 rounded-xl text-gray-500 text-xs">
-                No screenshots added yet. Click <strong>Add Screenshots</strong> to upload.
               </div>
             </div>
 
@@ -502,6 +359,282 @@
               <div>
                 <label class="block text-xs font-mono text-gray-400 mb-1">App Store URL</label>
                 <input v-model="form.appStoreUrl" type="url" placeholder="https://apps.apple.com/..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+              </div>
+            </div>
+          </template>
+
+          <!-- PUBLIC SPEAKING FIELDS -->
+          <template v-if="activeTab === 'speaking'">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono text-gray-400 mb-1">Talk Title *</label>
+                <input v-model="form.title" type="text" required placeholder="Architecting Offline-First Flutter Apps" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-gray-400 mb-1">Event Name *</label>
+                <input v-model="form.eventName" type="text" required placeholder="Droidcon London / GDG DevFest" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-mono text-gray-400 mb-1">Event Type *</label>
+                <select v-model="form.eventType" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none">
+                  <option value="Keynote">Keynote</option>
+                  <option value="Conference Talk">Conference Talk</option>
+                  <option value="Workshop">Workshop</option>
+                  <option value="Panel Discussion">Panel Discussion</option>
+                  <option value="Podcast / Webinar">Podcast / Webinar</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-gray-400 mb-1">Date</label>
+                <input v-model="form.date" type="text" placeholder="Oct 2025" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-gray-400 mb-1">Location</label>
+                <input v-model="form.location" type="text" placeholder="London, UK" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono text-gray-400 mb-1">Attendees / Social Proof</label>
+                <input v-model="form.attendees" type="text" placeholder="450+ Attendees" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+              </div>
+              <div class="flex items-center gap-2 pt-6">
+                <input id="isVirtual" v-model="form.isVirtual" type="checkbox" class="w-4 h-4 rounded bg-gray-950 border-gray-800 text-electric-blue focus:ring-0" />
+                <label for="isVirtual" class="text-xs font-mono text-gray-300">Virtual / Online Event</label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono text-gray-400 mb-1">Talk Description / Synopsis</label>
+              <textarea v-model="form.description" rows="3" placeholder="Overview of the presentation..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono text-gray-400 mb-1">Key Takeaways (one per line)</label>
+              <textarea v-model="form.keyTakeawaysInput" rows="3" placeholder="Designed fault-tolerant SQLite caching...&#10;Implemented dual-queue sync pipelines..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono text-gray-400 mb-1">Topic Hashtags (comma separated)</label>
+              <input v-model="form.tagsInput" type="text" placeholder="Flutter, Architecture, OfflineFirst, BLoC" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+            </div>
+
+            <!-- SLIDES DECK UPLOAD & URL SECTION -->
+            <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-mono text-gray-300 font-bold flex items-center gap-1.5">
+                  <span>📊 Presentation Slides (PDF / PPTX / Direct Link)</span>
+                  <span v-if="form.slidesLink" class="text-[10px] text-emerald-400 font-normal">● Available</span>
+                </label>
+                <input
+                  ref="slidesFileInput"
+                  type="file"
+                  accept=".pdf,.pptx,.ppt"
+                  class="hidden"
+                  @change="handleSlidesFileUpload"
+                />
+                <button
+                  type="button"
+                  @click="triggerSlidesFileInput"
+                  :disabled="slidesUpload.isUploading"
+                  class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 hover:bg-gray-700 text-yellow-300 border border-gray-700 transition-colors flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  <span>Upload Slide File</span>
+                </button>
+              </div>
+
+              <!-- Upload Progress -->
+              <div v-if="slidesUpload.isUploading" class="space-y-1">
+                <div class="flex justify-between text-[10px] font-mono text-gray-400">
+                  <span>Uploading slide presentation to Firebase Storage...</span>
+                  <span>{{ slidesUpload.progress }}%</span>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                  <div class="bg-yellow-400 h-1.5 rounded-full transition-all duration-200" :style="{ width: `${slidesUpload.progress}%` }"></div>
+                </div>
+              </div>
+
+              <div>
+                <input
+                  v-model="form.slidesLink"
+                  type="url"
+                  placeholder="https://... or click 'Upload Slide File' above"
+                  class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono text-gray-400 mb-1">Video Recording URL</label>
+                <input v-model="form.videoLink" type="url" placeholder="https://youtube.com/..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-gray-400 mb-1">GitHub Demo Repo URL</label>
+                <input v-model="form.repoLink" type="url" placeholder="https://github.com/..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono text-gray-400 mb-1">Event Page URL</label>
+              <input v-model="form.eventLink" type="url" placeholder="https://event.com/..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-sm text-white focus:border-electric-blue outline-none" />
+            </div>
+          </template>
+
+          <!-- SHARED FIREBASE STORAGE UPLOADERS (FOR PROJECTS & SPEAKING) -->
+          <template v-if="activeTab === 'projects' || activeTab === 'speaking'">
+            <!-- HERO / BANNER IMAGE SECTION -->
+            <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-mono text-gray-300 font-bold flex items-center gap-1.5">
+                  <span>🖼️ {{ activeTab === 'speaking' ? 'Hero / Stage Cover Photo' : 'Hero Image (Cover)' }}</span>
+                  <span v-if="form.heroImage" class="text-[10px] text-emerald-400 font-normal">● Uploaded</span>
+                </label>
+                <input
+                  ref="heroFileInput"
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  @change="handleHeroFileUpload"
+                />
+              </div>
+
+              <!-- Hero Image Preview -->
+              <div v-if="form.heroImage" class="relative group rounded-xl overflow-hidden border border-gray-800 bg-black max-h-48 flex items-center justify-center">
+                <img :src="form.heroImage" alt="Hero cover" class="w-full h-40 object-cover cursor-zoom-in" @click="openImagePreview(form.heroImage, 'Hero Cover Photo')" />
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 pointer-events-none">
+                  <span class="px-3 py-1 rounded-lg text-xs font-mono bg-black/70 text-electric-blue border border-electric-blue/30">
+                    🔍 Click to expand
+                  </span>
+                </div>
+                <!-- Delete Button (Top Right) -->
+                <button
+                  type="button"
+                  @click.stop="openDeleteImageConfirmation('hero', null, form.heroImage)"
+                  title="Delete Hero Image"
+                  class="absolute top-2 right-2 w-7 h-7 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center text-xs font-bold shadow-lg transition-transform hover:scale-110 z-10"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <!-- Hero Upload Dropzone -->
+              <div v-else class="space-y-2">
+                <div
+                  @click="triggerHeroFileInput"
+                  class="border-2 border-dashed border-gray-800 hover:border-electric-blue/60 rounded-xl p-4 text-center cursor-pointer transition-colors bg-gray-900/40 hover:bg-gray-900/80"
+                >
+                  <div class="text-xl mb-1">📁</div>
+                  <div class="text-xs font-medium text-gray-300">
+                    Click to upload {{ activeTab === 'speaking' ? 'Stage Photo / Banner' : 'Hero Cover image' }}
+                  </div>
+                  <div class="text-[10px] text-gray-500 font-mono">PNG, JPG, WebP up to 10MB</div>
+                </div>
+                <!-- Upload Progress -->
+                <div v-if="heroUpload.isUploading" class="space-y-1">
+                  <div class="flex justify-between text-[10px] font-mono text-gray-400">
+                    <span>Uploading image to Firebase Storage...</span>
+                    <span>{{ heroUpload.progress }}%</span>
+                  </div>
+                  <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-electric-blue h-1.5 rounded-full transition-all duration-200" :style="{ width: `${heroUpload.progress}%` }"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MULTI-SCREENSHOTS / EVENT GALLERY SECTION (WITH DRAG-AND-DROP REORDERING) -->
+            <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 space-y-3">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <div>
+                  <label class="text-xs font-mono text-gray-300 font-bold flex items-center gap-1.5">
+                    <span>📱 {{ activeTab === 'speaking' ? 'Event & Stage Gallery Photos' : 'App Screenshots (Multiple)' }}</span>
+                    <span class="text-[10px] text-gray-400 font-normal">({{ form.screenshots ? form.screenshots.length : 0 }} images)</span>
+                  </label>
+                  <p class="text-[10px] text-gray-500 mt-0.5">Drag to rearrange order. Click 🔍 to expand, ✕ to delete.</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <input
+                    ref="screenshotsFileInput"
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    class="hidden"
+                    @change="handleScreenshotsUpload"
+                  />
+                  <button
+                    type="button"
+                    @click="triggerScreenshotsFileInput"
+                    :disabled="screenshotsUpload.isUploading"
+                    class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 hover:bg-gray-700 text-electric-blue border border-gray-700 transition-colors flex items-center gap-1.5 disabled:opacity-50"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span>Add Photos</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Upload Progress -->
+              <div v-if="screenshotsUpload.isUploading" class="space-y-1">
+                <div class="flex justify-between text-[10px] font-mono text-gray-400">
+                  <span>Uploading {{ screenshotsUpload.totalFiles }} file(s)...</span>
+                  <span>{{ screenshotsUpload.progress }}%</span>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                  <div class="bg-electric-blue h-1.5 rounded-full transition-all duration-200" :style="{ width: `${screenshotsUpload.progress}%` }"></div>
+                </div>
+              </div>
+
+              <!-- Thumbnails Grid with Drag and Drop Reordering -->
+              <div v-if="form.screenshots && form.screenshots.length > 0" class="grid grid-cols-3 sm:grid-cols-4 gap-3 pt-2">
+                <div
+                  v-for="(imgUrl, index) in form.screenshots"
+                  :key="imgUrl + index"
+                  draggable="true"
+                  @dragstart="handleDragStart($event, index)"
+                  @dragover.prevent="handleDragOver($event, index)"
+                  @drop="handleDrop($event, index)"
+                  @dragend="handleDragEnd"
+                  class="aspect-[4/3] rounded-xl overflow-hidden border border-gray-800 bg-black relative group cursor-grab active:cursor-grabbing hover:border-electric-blue/60 transition-all shadow-md select-none"
+                  :class="{ 'opacity-40 border-dashed border-electric-blue scale-95': draggedIndex === index }"
+                >
+                  <img :src="imgUrl" alt="screenshot" class="w-full h-full object-cover pointer-events-none" />
+
+                  <!-- Position Badge -->
+                  <div class="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 text-[10px] font-mono text-gray-300">
+                    #{{ index + 1 }}
+                  </div>
+
+                  <!-- Expand Icon on Hover -->
+                  <button
+                    type="button"
+                    @click.stop="openImagePreview(imgUrl, `Photo #${index + 1}`)"
+                    title="Click to expand"
+                    class="absolute bottom-1.5 right-1.5 p-1 rounded-md bg-black/80 hover:bg-black text-electric-blue text-[10px] font-mono shadow z-10"
+                  >
+                    🔍
+                  </button>
+
+                  <!-- Delete Button (Top Right) -->
+                  <button
+                    type="button"
+                    @click.stop="openDeleteImageConfirmation('screenshot', index, imgUrl)"
+                    title="Delete Image"
+                    class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center text-[10px] font-bold shadow-lg transition-transform hover:scale-110 z-10"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+
+              <div v-else class="text-center py-6 border border-dashed border-gray-800 rounded-xl text-gray-500 text-xs">
+                No gallery photos added yet. Click <strong>Add Photos</strong> to upload.
               </div>
             </div>
           </template>
@@ -655,7 +788,7 @@
           Delete {{ deleteImageModal.type === 'hero' ? 'Hero Image' : 'Screenshot' }}?
         </h3>
         <p class="text-xs text-gray-400 leading-relaxed mb-5">
-          Are you sure you want to delete this file? It will be removed from Firebase Storage and your project. You can then upload a replacement.
+          Are you sure you want to delete this file? It will be removed from Firebase Storage and your document. You can then upload a replacement.
         </p>
 
         <!-- Preview of Image being deleted -->
@@ -739,6 +872,7 @@ const searchQuery = ref('')
 // Template Refs for file upload
 const heroFileInput = ref(null)
 const screenshotsFileInput = ref(null)
+const slidesFileInput = ref(null)
 
 // Drag and drop index
 const draggedIndex = ref(null)
@@ -753,6 +887,11 @@ const screenshotsUpload = reactive({
   isUploading: false,
   progress: 0,
   totalFiles: 0
+})
+
+const slidesUpload = reactive({
+  isUploading: false,
+  progress: 0
 })
 
 // Delete Image Confirmation Modal
@@ -787,6 +926,7 @@ const toast = reactive({
 const tabs = [
   { id: 'blogs', title: 'Blogs', icon: '📝' },
   { id: 'projects', title: 'Projects', icon: '🚀' },
+  { id: 'speaking', title: 'Speaking', icon: '🎤' },
   { id: 'journey', title: 'Tech Journey', icon: '🧭' },
   { id: 'experience', title: 'Experience', icon: '💼' },
   { id: 'skills', title: 'Skills', icon: '⚡' },
@@ -826,21 +966,25 @@ const activeTabTitle = computed(() => {
 })
 
 const currentItems = computed(() => {
+  let list = []
   switch (activeTab.value) {
-    case 'blogs': return store.blogs || []
-    case 'projects': return store.projects || []
-    case 'journey': return store.journey || []
-    case 'experience': return store.experience || []
-    case 'skills': return store.skills || []
-    case 'education': return store.education || []
-    default: return []
+    case 'blogs': list = store.blogs || []; break;
+    case 'projects': list = store.projects || []; break;
+    case 'speaking': list = store.speaking || []; break;
+    case 'journey': list = store.journey || []; break;
+    case 'experience': list = store.experience || []; break;
+    case 'skills': list = store.skills || []; break;
+    case 'education': list = store.education || []; break;
+    default: list = []; break;
   }
+  return [...list].sort((a, b) => (Number(b.order) || 0) - (Number(a.order) || 0))
 })
 
 const getCollectionCount = (tabId) => {
   switch (tabId) {
     case 'blogs': return store.blogs?.length || 0
     case 'projects': return store.projects?.length || 0
+    case 'speaking': return store.speaking?.length || 0
     case 'journey': return store.journey?.length || 0
     case 'experience': return store.experience?.length || 0
     case 'skills': return store.skills?.length || 0
@@ -909,13 +1053,16 @@ const refreshCurrentCollection = async () => {
 // Modal Form Operations
 const resetForm = () => {
   Object.keys(form).forEach(k => delete form[k])
-  form.order = currentItems.value.length
+  const maxOrder = currentItems.value.length > 0
+    ? Math.max(...currentItems.value.map(i => Number(i.order) || 0))
+    : -1
+  form.order = maxOrder + 1
   form.screenshots = []
 }
 
-const getProjectId = () => {
+const getMediaEntityId = () => {
   if (!modal.docId) {
-    modal.docId = generateDocId('projects')
+    modal.docId = generateDocId(activeTab.value)
   }
   return modal.docId
 }
@@ -925,6 +1072,10 @@ const openAddModal = () => {
   modal.isEdit = false
   modal.docId = generateDocId(activeTab.value)
   form.id = modal.docId
+  if (activeTab.value === 'speaking') {
+    form.eventType = 'Keynote'
+    form.isVirtual = false
+  }
   modal.show = true
 }
 
@@ -942,6 +1093,7 @@ const openEditModal = (item) => {
   if (Array.isArray(item.techStack)) form.techStackInput = item.techStack.join(', ')
   if (Array.isArray(item.tags)) form.tagsInput = item.tags.join(', ')
   if (Array.isArray(item.items)) form.itemsInput = item.items.join(', ')
+  if (Array.isArray(item.keyTakeaways)) form.keyTakeawaysInput = item.keyTakeaways.join('\n')
   if (Array.isArray(item.description)) form.descriptionLines = item.description.join('\n')
   if (item.project && !item.dissertation) form.dissertation = item.project
 
@@ -959,24 +1111,24 @@ const handleHeroFileUpload = async (e) => {
   const file = e.target.files?.[0]
   if (!file) return
 
-  const projId = getProjectId()
+  const entityId = getMediaEntityId()
+  const storageFolder = `${activeTab.value === 'speaking' ? 'speaking' : 'projects'}/${entityId}/hero`
   heroUpload.isUploading = true
   heroUpload.progress = 0
 
   try {
-    const folder = `projects/${projId}/hero`
-    const { downloadUrl } = await uploadFileToStorage(file, folder, (progress) => {
+    const { downloadUrl } = await uploadFileToStorage(file, storageFolder, (progress) => {
       heroUpload.progress = progress
     })
     form.heroImage = downloadUrl
 
-    // If editing existing project in Firestore, immediately persist update
+    // If editing existing item in Firestore, immediately persist update
     if (modal.isEdit && modal.docId) {
-      await updateCollectionDoc('projects', String(modal.docId), { heroImage: downloadUrl })
+      await updateCollectionDoc(activeTab.value, String(modal.docId), { heroImage: downloadUrl })
       await store.fetchAll()
-      showToast('Hero image uploaded and saved to project!')
+      showToast('Hero image uploaded and saved!')
     } else {
-      showToast('Hero image uploaded to project folder!')
+      showToast('Hero image uploaded to entity folder!')
     }
   } catch (err) {
     showToast(err.message || 'Failed to upload hero image', 'error')
@@ -997,7 +1149,8 @@ const handleScreenshotsUpload = async (e) => {
   const files = Array.from(e.target.files || [])
   if (!files.length) return
 
-  const projId = getProjectId()
+  const entityId = getMediaEntityId()
+  const storageFolder = `${activeTab.value === 'speaking' ? 'speaking' : 'projects'}/${entityId}/screenshots`
   screenshotsUpload.isUploading = true
   screenshotsUpload.progress = 0
   screenshotsUpload.totalFiles = files.length
@@ -1008,9 +1161,8 @@ const handleScreenshotsUpload = async (e) => {
 
   try {
     let completed = 0
-    const folder = `projects/${projId}/screenshots`
     const uploadPromises = files.map(async (file) => {
-      const { downloadUrl } = await uploadFileToStorage(file, folder)
+      const { downloadUrl } = await uploadFileToStorage(file, storageFolder)
       completed++
       screenshotsUpload.progress = Math.round((completed / files.length) * 100)
       return downloadUrl
@@ -1019,19 +1171,57 @@ const handleScreenshotsUpload = async (e) => {
     const urls = await Promise.all(uploadPromises)
     form.screenshots.push(...urls)
 
-    // If editing existing project in Firestore, immediately persist update
+    // If editing existing item in Firestore, immediately persist update
     if (modal.isEdit && modal.docId) {
-      await updateCollectionDoc('projects', String(modal.docId), { screenshots: form.screenshots })
+      await updateCollectionDoc(activeTab.value, String(modal.docId), { screenshots: form.screenshots })
       await store.fetchAll()
-      showToast(`Uploaded ${urls.length} screenshot(s) and saved to project!`)
+      showToast(`Uploaded ${urls.length} photo(s) and saved!`)
     } else {
-      showToast(`Uploaded ${urls.length} screenshot(s) to project folder!`)
+      showToast(`Uploaded ${urls.length} photo(s) to entity folder!`)
     }
   } catch (err) {
     showToast(err.message || 'Failed to upload screenshots', 'error')
   } finally {
     screenshotsUpload.isUploading = false
     if (screenshotsFileInput.value) screenshotsFileInput.value.value = ''
+  }
+}
+
+// Slide Deck File Trigger & Upload
+const triggerSlidesFileInput = () => {
+  if (slidesFileInput.value) {
+    slidesFileInput.value.click()
+  }
+}
+
+const handleSlidesFileUpload = async (e) => {
+  const file = e.target.files?.[0]
+  if (!file) return
+
+  const entityId = getMediaEntityId()
+  const storageFolder = `speaking/${entityId}/slides`
+  slidesUpload.isUploading = true
+  slidesUpload.progress = 0
+
+  try {
+    const { downloadUrl } = await uploadFileToStorage(file, storageFolder, (progress) => {
+      slidesUpload.progress = progress
+    })
+    form.slidesLink = downloadUrl
+
+    // If editing existing item in Firestore, immediately persist update
+    if (modal.isEdit && modal.docId) {
+      await updateCollectionDoc(activeTab.value, String(modal.docId), { slidesLink: downloadUrl })
+      await store.fetchAll()
+      showToast('Slide deck uploaded and saved!')
+    } else {
+      showToast('Slide deck uploaded to talk folder!')
+    }
+  } catch (err) {
+    showToast(err.message || 'Failed to upload slide deck', 'error')
+  } finally {
+    slidesUpload.isUploading = false
+    if (slidesFileInput.value) slidesFileInput.value.value = ''
   }
 }
 
@@ -1053,10 +1243,10 @@ const handleDrop = async (e, targetIndex) => {
 
   // If editing, immediately update order in Firestore
   if (modal.isEdit && modal.docId) {
-    await updateCollectionDoc('projects', String(modal.docId), { screenshots: form.screenshots })
+    await updateCollectionDoc(activeTab.value, String(modal.docId), { screenshots: form.screenshots })
     await store.fetchAll()
   }
-  showToast('Screenshots reordered')
+  showToast('Photos reordered')
 }
 
 const handleDragEnd = () => {
@@ -1081,17 +1271,17 @@ const handleConfirmDeleteImage = async () => {
     if (deleteImageModal.type === 'hero') {
       form.heroImage = null
       if (modal.isEdit && modal.docId) {
-        await updateCollectionDoc('projects', String(modal.docId), { heroImage: null })
+        await updateCollectionDoc(activeTab.value, String(modal.docId), { heroImage: null })
         await store.fetchAll()
       }
       showToast('Hero image removed')
     } else if (deleteImageModal.type === 'screenshot' && deleteImageModal.index !== null) {
       form.screenshots.splice(deleteImageModal.index, 1)
       if (modal.isEdit && modal.docId) {
-        await updateCollectionDoc('projects', String(modal.docId), { screenshots: form.screenshots })
+        await updateCollectionDoc(activeTab.value, String(modal.docId), { screenshots: form.screenshots })
         await store.fetchAll()
       }
-      showToast('Screenshot removed')
+      showToast('Photo removed')
     }
 
     deleteImageModal.show = false
@@ -1122,6 +1312,10 @@ const saveModalItem = async () => {
       payload.items = payload.itemsInput.split(',').map(s => s.trim()).filter(Boolean)
       delete payload.itemsInput
     }
+    if (payload.keyTakeawaysInput !== undefined) {
+      payload.keyTakeaways = payload.keyTakeawaysInput.split('\n').map(s => s.trim()).filter(Boolean)
+      delete payload.keyTakeawaysInput
+    }
     if (payload.descriptionLines !== undefined) {
       payload.description = payload.descriptionLines.split('\n').map(s => s.trim()).filter(Boolean)
       delete payload.descriptionLines
@@ -1145,7 +1339,7 @@ const saveModalItem = async () => {
 }
 
 const confirmDelete = async (item) => {
-  const label = item.title || item.degree || item.role || item.category || 'this item'
+  const label = item.title || item.degree || item.role || item.category || item.eventName || 'this item'
   if (!confirm(`Are you sure you want to delete "${label}" from Firestore?`)) {
     return
   }

@@ -7,6 +7,7 @@ import { journey } from "../src/data/journey.js";
 import { experience } from "../src/data/experience.js";
 import { skills } from "../src/data/skills.js";
 import { education } from "../src/data/education.js";
+import { speakingEngagements } from "../src/data/speaking.js";
 
 const firebaseConfig = {
   apiKey: process.env.VITE_FIREBASE_API_KEY || "AIzaSyCQtFifMiH9JL1gPBhrOQorB5u-J_R7VTE",
@@ -73,6 +74,9 @@ async function runSeed() {
 
     // 6. Education
     await seedCollection("education", education);
+
+    // 7. Public Speaking
+    await seedCollection("speaking", speakingEngagements);
 
     console.log("\n🎉 ALL COLLECTIONS SEEDED SUCCESSFULLY TO FIRESTORE!\n");
     process.exit(0);

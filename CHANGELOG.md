@@ -9,9 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2026-09-23
 
-### Added
+- **Public Speaking & Workshop Showcase**:
+  - Dedicated Public Speaking showcase component (`Speaking.vue`) featuring streamlined cards with format badges (Keynote, Talk, Workshop, Panel), topic hashtags, and social proof metrics.
+  - Interactive case-study detail modal (`SpeakingModal.vue`) featuring talk synopsis, **⚡ Key Technical Takeaways**, and high-resolution stage photo gallery with carousel Lightbox navigation.
+  - **1-Click Slide Downloader Engine**: Built-in file blob downloader that triggers immediate direct file downloads for slide decks (`.pdf`/`.pptx`).
+  - Studio Admin tab for full CRUD, Firebase Storage pipeline (`speaking/{talkId}/hero`, `speaking/{talkId}/screenshots`, `speaking/{talkId}/slides`), and drag-and-drop photo reordering.
+  - **Automatic FIFO Descending Ordering**: Incremental order calculation (`maxOrder + 1`) ensuring newest items always display first without requiring manual renumbering of older entries.
 - **Firebase Cloud Firestore Integration**:
-  - Dynamic cloud database support across 6 collections: `blogs`, `projects`, `journey` (My Tech Journey), `experience` (Work Experience), `skills` (Technical Skills), and `education`.
+  - Dynamic cloud database support across 7 collections: `blogs`, `projects`, `speaking` (Public Speaking), `journey` (My Tech Journey), `experience` (Work Experience), `skills` (Technical Skills), and `education`.
   - Service layer (`src/firebase/db.js`) providing standardized CRUD operations and auto ID generators (`generateDocId`).
   - Pinia state management integration in `src/store/index.js` with instant local fallbacks for zero-layout-shift and offline reliability.
 - **Firebase Storage & Image Asset Management**:

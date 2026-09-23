@@ -8,6 +8,7 @@ import { journey as initialJourney } from '../data/journey'
 import { experience as initialExperience } from '../data/experience'
 import { skills as initialSkills } from '../data/skills'
 import { education as initialEducation } from '../data/education'
+import { speakingEngagements as initialSpeaking } from '../data/speaking'
 
 export const useMainStore = defineStore('main', {
     state: () => ({
@@ -16,6 +17,8 @@ export const useMainStore = defineStore('main', {
         activeCategory: 'All',
         isModalOpen: false,
         selectedProject: null,
+        isSpeakingModalOpen: false,
+        selectedSpeaking: null,
 
         // Data Collections (initialized with instant local data)
         blogs: initialBlogs,
@@ -24,6 +27,7 @@ export const useMainStore = defineStore('main', {
         experience: initialExperience,
         skills: initialSkills,
         education: initialEducation,
+        speaking: initialSpeaking,
 
         // Loading and error states
         isLoadingData: false,
@@ -48,6 +52,14 @@ export const useMainStore = defineStore('main', {
             this.isModalOpen = false
             this.selectedProject = null
         },
+        openSpeakingModal(talk) {
+            this.selectedSpeaking = talk
+            this.isSpeakingModalOpen = true
+        },
+        closeSpeakingModal() {
+            this.isSpeakingModalOpen = false
+            this.selectedSpeaking = null
+        },
 
         // Firestore Fetch Actions
         async fetchAll() {
@@ -60,7 +72,8 @@ export const useMainStore = defineStore('main', {
                     this.fetchJourney(),
                     this.fetchExperience(),
                     this.fetchSkills(),
-                    this.fetchEducation()
+                    this.fetchEducation(),
+                    this.fetchSpeaking()
                 ])
                 this.lastFetchedAt = new Date().toISOString()
             } catch (error) {
@@ -134,6 +147,17 @@ export const useMainStore = defineStore('main', {
                 }
             } catch (err) {
                 console.warn('Fallback to static education:', err.message)
+            }
+        },
+
+        async fetchSpeaking() {
+            try {
+                const data = await getCollectionDocs('speaking', 'order', 'desc')
+                if (data && data.length > 0) {
+                    this.speaking = data
+                }
+            } catch (err) {
+                console.warn('Fallback to static speaking:', err.message)
             }
         }
     }

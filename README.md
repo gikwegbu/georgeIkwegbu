@@ -15,27 +15,30 @@ A modern, dynamic portfolio and real-time content management studio built for **
 ### Public Portfolio
 - **🎨 Modern Aesthetic**: Dark-themed architecture with "Electric Blue" accents, frosted glassmorphism, and responsive typography.
 - **⚡ Zero-Delay Loading**: Pinia state management is pre-seeded with instant fallbacks, ensuring zero layout shifts and offline reliability while hydrating fresh data from Firestore.
-- **🔍 Click-to-Expand Image Lightbox**: High-resolution fullscreen lightbox overlay for project hero images and screenshots with carousel navigation (`←` / `→`), thumbnail jumping, and keyboard controls (`Esc`, arrow keys).
+- **🔍 Click-to-Expand Image Lightbox**: High-resolution fullscreen lightbox overlay for project hero images, speaking stage photos, and screenshots with carousel navigation (`←` / `→`), thumbnail jumping, and keyboard controls (`Esc`, arrow keys).
 - **📱 Case Study Modals**: Deep-dive project modals featuring overview, role, tech stack chips, app store links, and screenshot galleries.
+- **🎤 Public Speaking Showcase & Modals**: Interactive speaking engagements hub with keynote/workshop filters, deep-dive modal case studies (`SpeakingModal.vue`), **⚡ Key Technical Takeaways**, 1-click slide presentation downloads, and stage photo galleries.
 - **🌊 Motion & Micro-Interactions**: Scroll-triggered view transitions and micro-animations powered by `@vueuse/motion`.
-- **🏷️ Dynamic Filtering**: Real-time project categorization across Mobility, Fintech, IoT, and AI.
+- **🏷️ Dynamic Filtering**: Real-time project and talk categorization.
 
 ### Studio & Content Management
 - **🔐 Secure Firebase Authentication**: Google Sign-In and Email/Password authentication.
-- **📑 Full CRUD Support**: Tabbed content management across 6 real-time Firestore collections:
+- **📑 Full CRUD Support**: Tabbed content management across 7 real-time Firestore collections:
   - 📝 **Blogs & Articles**
   - 🚀 **Projects & Mobile Apps**
+  - 🎤 **Public Speaking & Workshops**
   - 🧭 **My Tech Journey** (Career Timeline)
   - 💼 **Work Experience**
   - ⚡ **Technical Skills**
   - 🎓 **Academic Education**
 - **🖼️ Firebase Storage Pipeline**:
-  - Organized directory hierarchy per project ID (`projects/{projectId}/hero` and `projects/{projectId}/screenshots`).
+  - Organized directory hierarchy per entity ID (`projects/{projectId}/` and `speaking/{talkId}/`).
   - Single-image Hero Cover upload with real-time progress indicators.
-  - Multi-file screenshot uploader with aggregate progress tracking.
-  - Drag-and-drop screenshot reordering with instantaneous Firestore order sync.
+  - Multi-file screenshot & stage photo uploader with aggregate progress tracking.
+  - Presentation slide deck file upload to storage.
+  - Drag-and-drop image reordering with instantaneous Firestore order sync.
   - Safe asset deletion confirmation modals.
-- **🆔 Standard Firestore Auto IDs**: Automatic 20-character canonical Firestore ID generation for new entries.
+- **🆔 Standard Firestore Auto IDs & FIFO Ordering**: Automatic 20-character canonical Firestore ID generation and auto-incrementing display ordering for frictionless content creation.
 
 ---
 

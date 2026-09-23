@@ -21,7 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const COLLECTIONS = ["blogs", "projects", "journey", "experience", "skills", "education"];
+const COLLECTIONS = ["blogs", "projects", "speaking", "journey", "experience", "skills", "education"];
 
 async function cleanCollection(colName) {
   console.log(`\n🧹 Cleaning collection '${colName}'...`);
