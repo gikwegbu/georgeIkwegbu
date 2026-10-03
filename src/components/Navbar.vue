@@ -5,11 +5,63 @@
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
-        <!-- Logo -->
-        <div class="flex-shrink-0 cursor-pointer" @click="scrollToSection('hero')">
-          <span class="font-display font-bold text-xl tracking-wider text-white">
-            <span class="text-electric-blue">&lt;</span>GI<span class="text-electric-blue"> /&gt;</span>
-          </span>
+        <!-- Logo with Long-Press Easter Egg to Admin -->
+        <div 
+          class="flex-shrink-0 cursor-pointer select-none relative group"
+          @mousedown="handlePressStart"
+          @mouseup="handlePressEnd"
+          @mouseleave="handlePressCancel"
+          @touchstart="handleTouchStart"
+          @touchend="handlePressEnd"
+          @touchcancel="handlePressCancel"
+          @contextmenu.prevent
+          title="George Ikwegbu"
+        >
+          <div 
+            class="relative px-3 py-1.5 rounded-xl transition-all duration-300 flex items-center justify-center overflow-hidden"
+            :class="{ 
+              'bg-electric-blue/15 shadow-[0_0_25px_rgba(0,240,255,0.5)] scale-105 ring-1 ring-electric-blue/50': showFeedback
+            }"
+          >
+            <!-- Charging Progress Fill / SVG Border Ring (Only shown after silent threshold) -->
+            <svg 
+              v-if="showFeedback" 
+              class="absolute inset-0 w-full h-full pointer-events-none"
+              preserveAspectRatio="none"
+              viewBox="0 0 100 100"
+            >
+              <!-- Track -->
+              <rect x="2" y="2" width="96" height="96" rx="14" ry="14" fill="none" stroke="rgba(0, 240, 255, 0.2)" stroke-width="3" />
+              <!-- Progress Indicator -->
+              <rect 
+                x="2" y="2" width="96" height="96" rx="14" ry="14" 
+                fill="none" 
+                stroke="#00f0ff" 
+                stroke-width="3.5"
+                stroke-linecap="round"
+                :style="{
+                  strokeDasharray: '400',
+                  strokeDashoffset: `${400 - (holdProgress / 100) * 400}`,
+                  transition: 'stroke-dashoffset 40ms linear'
+                }"
+              />
+            </svg>
+
+            <!-- Charging Ambient Aura Bar -->
+            <div 
+              v-if="showFeedback" 
+              class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-transparent via-electric-blue to-transparent transition-all duration-75"
+              :style="{ width: `${holdProgress}%` }"
+            ></div>
+
+            <!-- Logo Text -->
+            <span 
+              class="font-display font-bold text-xl tracking-wider text-white transition-all duration-200 z-10"
+              :class="{ 'text-white drop-shadow-[0_0_12px_#00f0ff]': showFeedback }"
+            >
+              <span class="text-electric-blue">&lt;</span>GI<span class="text-electric-blue"> /&gt;</span>
+            </span>
+          </div>
         </div>
 
         <!-- Desktop Menu -->
@@ -79,9 +131,89 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
+
+// Easter Egg: Click & Hold Logo to unlock Admin (/xxy)
+const isHolding = ref(false)
+const showFeedback = ref(false)
+const holdProgress = ref(0)
+const SILENT_DELAY = 450 // 450ms: Normal clicks/taps are completely silent & show zero visual changes
+const TOTAL_DURATION = 1900 // 1.9s total hold duration to trigger unlock
+let animationFrameId = null
+let pressStartTime = 0
+let triggeredAdmin = false
+
+const handlePressStart = () => {
+  triggeredAdmin = false
+  isHolding.value = true
+  showFeedback.value = false
+  holdProgress.value = 0
+  pressStartTime = Date.now()
+
+  const tick = () => {
+    const elapsed = Date.now() - pressStartTime
+
+    // Only reveal visual charging feedback if the user deliberately held past SILENT_DELAY
+    if (elapsed >= SILENT_DELAY) {
+      showFeedback.value = true
+      const activeElapsed = elapsed - SILENT_DELAY
+      const activeDuration = TOTAL_DURATION - SILENT_DELAY
+      const progress = Math.min(100, (activeElapsed / activeDuration) * 100)
+      holdProgress.value = progress
+    }
+
+    if (elapsed >= TOTAL_DURATION) {
+      triggerAdminUnlock()
+    } else if (isHolding.value) {
+      animationFrameId = requestAnimationFrame(tick)
+    }
+  }
+
+  animationFrameId = requestAnimationFrame(tick)
+}
+
+const handleTouchStart = () => {
+  handlePressStart()
+}
+
+const handlePressCancel = () => {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+    animationFrameId = null
+  }
+  isHolding.value = false
+  showFeedback.value = false
+  holdProgress.value = 0
+}
+
+const handlePressEnd = () => {
+  const elapsed = Date.now() - pressStartTime
+  handlePressCancel()
+
+  // If released before silent threshold (standard quick click/tap), smoothly scroll to hero
+  if (!triggeredAdmin && elapsed < SILENT_DELAY) {
+    scrollToSection('hero')
+  }
+}
+
+const triggerAdminUnlock = () => {
+  triggeredAdmin = true
+  handlePressCancel()
+
+  // Haptic feedback for mobile/touch devices
+  if (typeof navigator !== 'undefined' && navigator.vibrate) {
+    try {
+      navigator.vibrate([40, 50, 80])
+    } catch (_) {}
+  }
+
+  // Client-side SPA navigation to secret admin route
+  router.push('/xxy')
+}
 
 const navItems = [
   { name: 'About', id: 'about' },
@@ -134,5 +266,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  handlePressCancel()
 })
 </script>
