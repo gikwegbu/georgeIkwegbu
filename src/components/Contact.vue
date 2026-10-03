@@ -39,31 +39,95 @@
           </div>
         </div>
 
-        <!-- Right Side (Form) -->
+        <!-- Right Side (Form / Success State) -->
         <div 
-          class="bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-xl"
+          class="bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-xl relative overflow-hidden"
           v-motion
           :initial="{ opacity: 0, x: 30 }"
           :visible="{ opacity: 1, x: 0, transition: { duration: 600, delay: 200 } }"
         >
-          <form action="https://formspree.io/f/mqazqjvz" method="POST" class="space-y-6">
+          <!-- Success State -->
+          <div v-if="isSubmitted" class="py-8 text-center space-y-5 animate-fade-in">
+            <div class="w-16 h-16 bg-electric-blue/10 border border-electric-blue/40 rounded-full flex items-center justify-center mx-auto text-electric-blue shadow-[0_0_30px_rgba(0,240,255,0.3)]">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            
+            <div class="space-y-2">
+              <h3 class="text-2xl font-display font-bold text-white">Message Received! 🚀</h3>
+              <p class="text-gray-300 text-sm max-w-sm mx-auto leading-relaxed">
+                Thanks for reaching out. I've received your note and will get back to you shortly.
+              </p>
+            </div>
+
+            <button 
+              @click="resetForm" 
+              class="px-6 py-2.5 rounded-xl text-xs font-mono font-bold bg-gray-800 hover:bg-gray-700 text-electric-blue border border-gray-700 transition-all hover:scale-105"
+            >
+              Send Another Message
+            </button>
+          </div>
+
+          <!-- Contact Form -->
+          <form v-else @submit.prevent="handleSubmit" class="space-y-6">
+            <!-- Error Banner -->
+            <div v-if="errorMessage" class="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2">
+              <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <span>{{ errorMessage }}</span>
+            </div>
+
             <div>
               <label for="name" class="block text-sm font-medium text-gray-400 mb-2">Name</label>
-              <input type="text" id="name" name="name" required class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electric-blue transition-colors">
+              <input 
+                v-model="form.name" 
+                type="text" 
+                id="name" 
+                name="name" 
+                required 
+                placeholder="John Doe"
+                class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-electric-blue transition-colors"
+              >
             </div>
             
             <div>
               <label for="email" class="block text-sm font-medium text-gray-400 mb-2">Email</label>
-              <input type="email" id="email" name="email" required class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electric-blue transition-colors">
+              <input 
+                v-model="form.email" 
+                type="email" 
+                id="email" 
+                name="email" 
+                required 
+                placeholder="john@example.com"
+                class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-electric-blue transition-colors"
+              >
             </div>
             
             <div>
               <label for="message" class="block text-sm font-medium text-gray-400 mb-2">Message</label>
-              <textarea id="message" name="message" rows="4" required class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electric-blue transition-colors resize-none"></textarea>
+              <textarea 
+                v-model="form.message" 
+                id="message" 
+                name="message" 
+                rows="4" 
+                required 
+                placeholder="Hi George, let's talk about..."
+                class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-electric-blue transition-colors resize-none"
+              ></textarea>
             </div>
             
-            <button type="submit" class="w-full bg-electric-blue text-black font-bold py-4 rounded-lg hover:bg-white hover:scale-[1.02] transition-all duration-300 shadow-[0_0_20px_rgba(0,180,255,0.3)] hover:shadow-[0_0_30px_rgba(0,180,255,0.5)]">
-              Send Message
+            <button 
+              type="submit" 
+              :disabled="isSubmitting"
+              class="w-full bg-electric-blue text-black font-bold py-4 rounded-lg hover:bg-white hover:scale-[1.02] transition-all duration-300 shadow-[0_0_20px_rgba(0,180,255,0.3)] hover:shadow-[0_0_30px_rgba(0,180,255,0.5)] disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center gap-2"
+            >
+              <svg v-if="isSubmitting" class="w-5 h-5 animate-spin text-black" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{{ isSubmitting ? 'Sending Message...' : 'Send Message' }}</span>
             </button>
           </form>
         </div>
@@ -74,4 +138,58 @@
 </template>
 
 <script setup>
+import { reactive, ref } from 'vue'
+
+const form = reactive({
+  name: '',
+  email: '',
+  message: ''
+})
+
+const isSubmitting = ref(false)
+const isSubmitted = ref(false)
+const errorMessage = ref('')
+
+const handleSubmit = async () => {
+  isSubmitting.value = true
+  errorMessage.value = ''
+
+  try {
+    const response = await fetch('https://formspree.io/f/mzbjapka', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        message: form.message
+      })
+    })
+
+    if (response.ok) {
+      isSubmitted.value = true
+      form.name = ''
+      form.email = ''
+      form.message = ''
+    } else {
+      const data = await response.json().catch(() => ({}))
+      if (data && data.errors && data.errors.length > 0) {
+        errorMessage.value = data.errors.map(err => err.message).join(', ')
+      } else {
+        errorMessage.value = 'Oops! There was a problem sending your message. Please try again.'
+      }
+    }
+  } catch (err) {
+    errorMessage.value = 'Network error. Please check your internet connection or email directly.'
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+const resetForm = () => {
+  isSubmitted.value = false
+  errorMessage.value = ''
+}
 </script>
